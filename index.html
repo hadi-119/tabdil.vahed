@@ -3,48 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تبدیل دما</title>
-    <link rel="stylesheet" href="./app.css">
+    <title>محاسبه‌گر فیزیک</title>
+    <style>
+        @font-face {
+            font-family: "shabnam";
+            src: url(fonts/Shabnam-FD.woff2);
+        }
+        body {
+            font-family: "shabnam", Arial, sans-serif;
+            text-align: center;
+            background: #b8fc88;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+            color: #000;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 400px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h3{
+            color: #000;
+            margin-bottom: 15px;
+        }
+        input {
+            font-family: "shabnam";
+            margin: 10px 0;
+            padding: 10px;
+            width: 94%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        input:focus {
+            border: 1px solid #007BFF;
+        }
+        button {
+            font-family: "shabnam";
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        select {
+            font-family: "shabnam";
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>تبدیل دما </h1>
 
-    <div class="converter">
-        <h2>سیلیسیوس به فارنهایت </h2>
-        <input type="number" id="celsius1" placeholder="دما در سیلیسیوس">
-        <input type="number" id="fahrenheit" placeholder="دما در فارنهایت">
-        <button onclick="convertCtoF()">تبدیل به فارنهایت</button>
-        <button onclick="convertFtoC()">تبدیل به سیلیسیوس</button>
+    <h1>محاسبه‌گر فیزیک</h1>
+
+    <!-- محاسبه فشار جامدات -->
+    <div class="container">
+        <h3>فشار جامدات</h3>
+        <input type="number" id="force" placeholder="نیرو (N)">
+        <input type="number" id="area" placeholder="مساحت (m²)">
+        <button onclick="calculateSolidPressure()">محاسبه</button>
+        <p id="solidPressureResult"></p>
     </div>
 
-    <div class="converter">
-        <h2>سیلیسیوس به کلوین </h2>
-        <input type="number" id="celsius2" placeholder="دما در سیلیسیوس">
-        <input type="number" id="kelvin" placeholder="دما در کلوین">
-        <button onclick="convertCtoK()">تبدیل به کلوین</button>
-        <button onclick="convertKtoC()">تبدیل به سیلیسیوس</button>
+    <!-- محاسبه فشار شاره -->
+    <div class="container">
+        <h3>فشار شاره</h3>
+        <input type="number" id="density" placeholder="چگالی (kg/m³)">
+        <input type="number" id="gravity" value="10" placeholder="گرانش (m/s²)">
+        <input type="number" id="depth" placeholder="عمق (m)">
+        <button onclick="calculateFluidPressure()">محاسبه</button>
+        <p id="fluidPressureResult"></p>
+    </div>
+
+    <!-- محاسبه انرژی جنبشی -->
+    <div class="container">
+        <h3>انرژی جنبشی</h3>
+        <input type="number" id="mass" placeholder="جرم (kg)">
+        <input type="number" id="velocity" placeholder="سرعت (m/s)">
+        <button onclick="calculateKineticEnergy()">محاسبه</button>
+        <p id="kineticEnergyResult"></p>
+    </div>
+
+    <!-- تبدیل دما -->
+    <div class="container">
+        <h3>تبدیل دما</h3>
+        <input type="number" id="tempInput" placeholder="مقدار دما">
+        <select id="tempFrom">
+            <option value="C">سلسیوس</option>
+            <option value="F">فارنهایت</option>
+            <option value="K">کلوین</option>
+        </select>
+        <select id="tempTo">
+            <option value="C">سلسیوس</option>
+            <option value="F">فارنهایت</option>
+            <option value="K">کلوین</option>
+        </select>
+        <button onclick="convertTemperature()">تبدیل</button>
+        <p id="tempResult"></p>
+    </div>
+
+    <!-- انبساط گرمایی طولی -->
+    <div class="container">
+        <h3>انبساط گرمایی طولی</h3>
+        <input type="number" id="length" placeholder="طول اولیه (m)">
+        <input type="number" id="alphaL" placeholder="ضریب انبساط (1/°C)">
+        <input type="number" id="deltaT" placeholder="تغییر دما (°C)">
+        <button onclick="calculateLinearExpansion()">محاسبه</button>
+        <p id="linearExpansionResult"></p>
     </div>
 
     <script>
-        function convertCtoF() {
-            const celsius = parseFloat(document.getElementById('celsius1').value);
-            document.getElementById('fahrenheit').value = (celsius * 9/5) + 32;
+        function calculateSolidPressure() {
+            let force = document.getElementById('force').value;
+            let area = document.getElementById('area').value;
+            if (force && area) {
+                let pressure = force / area;
+                document.getElementById('solidPressureResult').innerText = "فشار: " + pressure.toFixed(2) + " پاسکال";
+            }
         }
 
-        function convertFtoC() {
-            const fahrenheit = parseFloat(document.getElementById('fahrenheit').value);
-            document.getElementById('celsius1').value = (fahrenheit - 32) * 5/9;
+        function calculateFluidPressure() {
+            let density = document.getElementById('density').value;
+            let gravity = document.getElementById('gravity').value;
+            let depth = document.getElementById('depth').value;
+            if (density && gravity && depth) {
+                let pressure = density * gravity * depth;
+                document.getElementById('fluidPressureResult').innerText = "فشار: " + pressure.toFixed(2) + " پاسکال";
+            }
         }
 
-        function convertCtoK() {
-            const celsius = parseFloat(document.getElementById('celsius2').value);
-            document.getElementById('kelvin').value = celsius + 273;
+        function calculateKineticEnergy() {
+            let mass = document.getElementById('mass').value;
+            let velocity = document.getElementById('velocity').value;
+            if (mass && velocity) {
+                let energy = 0.5 * mass * velocity * velocity;
+                document.getElementById('kineticEnergyResult').innerText = "انرژی جنبشی: " + energy.toFixed(2) + " ژول";
+            }
         }
 
-        function convertKtoC() {
-            const kelvin = parseFloat(document.getElementById('kelvin').value);
-            document.getElementById('celsius2').value = kelvin - 273;
+        function convertTemperature() {
+            let temp = parseFloat(document.getElementById("tempInput").value);
+            let from = document.getElementById("tempFrom").value;
+            let to = document.getElementById("tempTo").value;
+            let result = temp;
+
+            if (from === "C" && to === "F") result = (temp * 9/5) + 32;
+            else if (from === "C" && to === "K") result = temp + 273.15;
+            else if (from === "F" && to === "C") result = (temp - 32) * 5/9;
+            else if (from === "F" && to === "K") result = (temp - 32) * 5/9 + 273.15;
+            else if (from === "K" && to === "C") result = temp - 273.15;
+            else if (from === "K" && to === "F") result = (temp - 273.15) * 9/5 + 32;
+
+            document.getElementById("tempResult").innerText = "نتیجه: " + result.toFixed(2);
+        }
+
+        function calculateLinearExpansion() {
+            let L = parseFloat(document.getElementById("length").value);
+            let alpha = parseFloat(document.getElementById("alphaL").value);
+            let deltaT = parseFloat(document.getElementById("deltaT").value);
+            let deltaL = L * alpha * deltaT;
+            document.getElementById("linearExpansionResult").innerText = "افزایش طول: " + deltaL.toFixed(6) + " متر";
         }
     </script>
+
 </body>
 </html>

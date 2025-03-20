@@ -110,6 +110,16 @@
         <p id="kineticEnergyResult"></p>
     </div>
 
+    <!-- انرژی پتانسیل گرانشی -->
+     <div class="container">
+        <h3>انرژی پتانسیل گرانشی</h3>
+        <input type="number" id="mas" required>
+        <input type="number" id="height" required>
+        <input type="number" id="gravity1" value="10" required>
+        <button onclick="calculatePE()">محاسبه</button>
+        <p id="result"></p>
+     </div>
+
     <!-- تبدیل دما -->
     <div class="container">
         <h3>تبدیل دما</h3>
@@ -194,6 +204,14 @@
             let deltaT = parseFloat(document.getElementById("deltaT").value);
             let deltaL = L * alpha * deltaT;
             document.getElementById("linearExpansionResult").innerText = "افزایش طول: " + deltaL.toFixed(6) + " متر";
+        }
+
+        function calculatePE() {
+            const mass = parseFloat(document.getElementById('mas').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const gravity = parseFloat(document.getElementById('gravity1').value || 10);
+            const potentialEnergy = mass * gravity * height;
+            document.getElementById('result').textContent = "انرژی پتانسیل گرانشی: " + potentialEnergy.toFixed(2) + " ژول";
         }
     </script>
 

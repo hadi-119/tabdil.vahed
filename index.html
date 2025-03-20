@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تبدیل دما</title>
+    <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+    <h1>تبدیل دما </h1>
+
+    <div class="converter">
+        <h2>سیلیسیوس به فارنهایت </h2>
+        <input type="number" id="celsius1" placeholder="دما در سیلیسیوس">
+        <input type="number" id="fahrenheit" placeholder="دما در فارنهایت">
+        <button onclick="convertCtoF()">تبدیل به فارنهایت</button>
+        <button onclick="convertFtoC()">تبدیل به سیلیسیوس</button>
+    </div>
+
+    <div class="converter">
+        <h2>سیلیسیوس به کلوین </h2>
+        <input type="number" id="celsius2" placeholder="دما در سیلیسیوس">
+        <input type="number" id="kelvin" placeholder="دما در کلوین">
+        <button onclick="convertCtoK()">تبدیل به کلوین</button>
+        <button onclick="convertKtoC()">تبدیل به سیلیسیوس</button>
+    </div>
+
+    <script>
+        function convertCtoF() {
+            const celsius = parseFloat(document.getElementById('celsius1').value);
+            document.getElementById('fahrenheit').value = (celsius * 9/5) + 32;
+        }
+
+        function convertFtoC() {
+            const fahrenheit = parseFloat(document.getElementById('fahrenheit').value);
+            document.getElementById('celsius1').value = (fahrenheit - 32) * 5/9;
+        }
+
+        function convertCtoK() {
+            const celsius = parseFloat(document.getElementById('celsius2').value);
+            document.getElementById('kelvin').value = celsius + 273;
+        }
+
+        function convertKtoC() {
+            const kelvin = parseFloat(document.getElementById('kelvin').value);
+            document.getElementById('celsius2').value = kelvin - 273;
+        }
+    </script>
+</body>
+</html>

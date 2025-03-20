@@ -113,12 +113,29 @@
     <!-- انرژی پتانسیل گرانشی -->
      <div class="container">
         <h3>انرژی پتانسیل گرانشی</h3>
-        <input type="number" id="mas" required>
-        <input type="number" id="height" required>
-        <input type="number" id="gravity1" value="10" required>
+        <input type="number" id="mas" placeholder="جرم (kg)">
+        <input type="number" id="height" placeholder="ارتفاع (m)">
+        <input type="number" id="gravity1" value="10" placeholder="گرانش (m/s²)">
         <button onclick="calculatePE()">محاسبه</button>
         <p id="result"></p>
      </div>
+
+     <!-- انرژی مکانیکی -->
+      <div class="container">
+        <h3>انرژی مکانیکی</h3>
+        <h4>انرژی جنبشی (KE)</h4>
+        <input type="number" id="mass1" placeholder="جرم  (kg)">
+        <input type="number" id="velocity1" placeholder="سرعت (m/s)">
+
+        <h4>انرژی پتانسیل (PE)</h4>
+        <input type="number" id="height1" placeholder="ارتفاع (m)">
+        <input type="number" id="gravity2" value="10" placeholder="گرانش (m/s²)">
+
+        <button onclick="calculateMechanicalEnergy()">محاسبه</button>
+
+        <p id="result1"></p>
+    
+      </div>
 
     <!-- تبدیل دما -->
     <div class="container">
@@ -212,6 +229,23 @@
             const gravity = parseFloat(document.getElementById('gravity1').value || 10);
             const potentialEnergy = mass * gravity * height;
             document.getElementById('result').textContent = "انرژی پتانسیل گرانشی: " + potentialEnergy.toFixed(2) + " ژول";
+        }
+
+        function calculateMechanicalEnergy() {
+            // محاسبه انرژی جنبشی
+            const mass = parseFloat(document.getElementById('mass1').value);
+            const velocity = parseFloat(document.getElementById('velocity1').value);
+            const kineticEnergy = 0.5 * mass * Math.pow(velocity, 2);
+
+            // محاسبه انرژی پتانسیل
+            const height = parseFloat(document.getElementById('height1').value);
+            const gravity = parseFloat(document.getElementById('gravity2').value || 10);
+            const potentialEnergy = mass * gravity * height;
+
+            // جمع KE و PE برای انرژی مکانیکی
+            const mechanicalEnergy = kineticEnergy + potentialEnergy;
+
+            document.getElementById('result1').textContent = "انرژی مکانیکی: " + mechanicalEnergy.toFixed(2) + " ژول";
         }
     </script>
 
